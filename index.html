@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expense Tracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+
+    <!-- Main App -->
+    <div class="app" id="mainApp">
+      <header class="app-header">
+        <div class="header-content">
+          <h1>Expense Tracker</h1>
+          <p class="subtitle">Track your daily spending, stay on top of your budget</p>
+        </div>
+        <div class="header-actions">
+          <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+            <span class="theme-icon-light">&#9728;</span>
+            <span class="theme-icon-dark">&#9789;</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="main-content">
+        <!-- Summary Cards -->
+        <section class="summary-section" id="summarySection">
+          <div class="summary-card total-card">
+            <div class="summary-icon">&#128178;</div>
+            <div class="summary-info">
+              <span class="summary-label">Total This Month</span>
+              <span class="summary-value" id="totalMonth">&#8377;0.00</span>
+            </div>
+          </div>
+          <div class="summary-card today-card">
+            <div class="summary-icon">&#128197;</div>
+            <div class="summary-info">
+              <span class="summary-label">Today</span>
+              <span class="summary-value" id="totalToday">&#8377;0.00</span>
+            </div>
+          </div>
+          <div class="summary-card count-card">
+            <div class="summary-icon">&#128221;</div>
+            <div class="summary-info">
+              <span class="summary-label">Transactions</span>
+              <span class="summary-value" id="totalCount">0</span>
+            </div>
+          </div>
+          <div class="summary-card avg-card">
+            <div class="summary-icon">&#128202;</div>
+            <div class="summary-info">
+              <span class="summary-label">Avg / Day</span>
+              <span class="summary-value" id="avgDay">&#8377;0.00</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Budget Section -->
+        <section class="budget-section">
+          <div class="budget-header">
+            <h2 class="section-title">Monthly Budget</h2>
+            <button class="btn-budget-set" id="setBudgetBtn">Set Budget</button>
+          </div>
+          <div class="budget-display" id="budgetDisplay">
+            <div class="budget-bar-track">
+              <div class="budget-bar-fill" id="budgetBarFill" style="width:0%"></div>
+            </div>
+            <div class="budget-info">
+              <span id="budgetSpent">&#8377;0.00</span>
+              <span class="budget-separator">/</span>
+              <span id="budgetLimit">&#8377;0.00</span>
+              <span class="budget-status" id="budgetStatus"></span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Add Expense Form -->
+        <section class="form-section">
+          <h2 class="section-title">Add New Expense</h2>
+          <form id="expenseForm" class="expense-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="description">Description</label>
+                <input
+                  type="text"
+                  id="description"
+                  name="description"
+                  placeholder="e.g., Grocery shopping at Walmart"
+                  required
+                />
+              </div>
+              <div class="form-group form-amount">
+                <label for="amount">Amount</label>
+                <div class="amount-input">
+                  <span class="currency-symbol">&#8377;</span>
+                  <input
+                    type="number"
+                    id="amount"
+                    name="amount"
+                    step="0.01"
+                    min="0.01"
+                    placeholder="0.00"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="category">Category</label>
+                <select id="category" name="category" required>
+                  <option value="groceries">Groceries</option>
+                  <option value="transport">Transport</option>
+                  <option value="dining">Dining Out</option>
+                  <option value="utilities">Utilities</option>
+                  <option value="entertainment">Entertainment</option>
+                  <option value="shopping">Shopping</option>
+                  <option value="health">Health</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="date">Date</label>
+                <input type="date" id="date" name="date" required />
+              </div>
+              <div class="form-group form-recurring">
+                <label for="isRecurring">Recurring?</label>
+                <select id="isRecurring" name="isRecurring">
+                  <option value="false">One-time</option>
+                  <option value="monthly">Monthly</option>
+                  <option value="weekly">Weekly</option>
+                </select>
+              </div>
+              <button type="submit" class="btn-add" id="submitBtn">Add Expense</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Charts Section -->
+        <section class="charts-section">
+          <div class="chart-card">
+            <h2 class="section-title">Monthly Trend</h2>
+            <div class="chart-container" id="trendChart">
+              <p class="empty-hint">Add expenses to see your trend.</p>
+            </div>
+          </div>
+          <div class="chart-card">
+            <h2 class="section-title">Category Split</h2>
+            <div class="chart-container" id="pieChart">
+              <p class="empty-hint">Add expenses to see your category split.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Category Breakdown -->
+        <section class="category-section">
+          <h2 class="section-title">Spending by Category</h2>
+          <div class="category-breakdown" id="categoryBreakdown">
+            <p class="empty-hint">Add an expense to see your category breakdown.</p>
+          </div>
+        </section>
+
+        <!-- Expense List -->
+        <section class="list-section">
+          <div class="list-header">
+            <h2 class="section-title">Recent Expenses</h2>
+            <div class="filter-bar">
+              <input type="text" id="searchInput" class="search-input" placeholder="Search expenses..." />
+              <select id="filterCategory" class="filter-select">
+                <option value="all">All Categories</option>
+                <option value="groceries">Groceries</option>
+                <option value="transport">Transport</option>
+                <option value="dining">Dining Out</option>
+                <option value="utilities">Utilities</option>
+                <option value="entertainment">Entertainment</option>
+                <option value="shopping">Shopping</option>
+                <option value="health">Health</option>
+                <option value="other">Other</option>
+              </select>
+              <select id="filterPeriod" class="filter-select">
+                <option value="all">All Time</option>
+                <option value="today">Today</option>
+                <option value="week">This Week</option>
+                <option value="month">This Month</option>
+              </select>
+            </div>
+          </div>
+          <div class="expense-list" id="expenseList">
+            <div class="loading-state">Loading your expenses...</div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="app-footer">
+        <p>Expense Tracker -- Your spending, organized.</p>
+      </footer>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal-overlay" id="editModal">
+      <div class="modal">
+        <div class="modal-header">
+          <h3>Edit Expense</h3>
+          <button class="modal-close" id="closeModal" aria-label="Close">&times;</button>
+        </div>
+        <form id="editForm" class="expense-form modal-form">
+          <div class="form-group">
+            <label for="editDescription">Description</label>
+            <input type="text" id="editDescription" required />
+          </div>
+          <div class="form-row">
+            <div class="form-group form-amount">
+              <label for="editAmount">Amount</label>
+              <div class="amount-input">
+                <span class="currency-symbol">&#8377;</span>
+                <input type="number" id="editAmount" step="0.01" min="0.01" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="editCategory">Category</label>
+              <select id="editCategory" required>
+                <option value="groceries">Groceries</option>
+                <option value="transport">Transport</option>
+                <option value="dining">Dining Out</option>
+                <option value="utilities">Utilities</option>
+                <option value="entertainment">Entertainment</option>
+                <option value="shopping">Shopping</option>
+                <option value="health">Health</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="editDate">Date</label>
+            <input type="date" id="editDate" required />
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn-cancel" id="cancelEdit">Cancel</button>
+            <button type="submit" class="btn-add">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Budget Modal -->
+    <div class="modal-overlay" id="budgetModal">
+      <div class="modal">
+        <div class="modal-header">
+          <h3>Set Monthly Budget</h3>
+          <button class="modal-close" id="closeBudgetModal" aria-label="Close">&times;</button>
+        </div>
+        <form id="budgetForm" class="expense-form modal-form">
+          <div class="form-group">
+            <label for="budgetAmount">Monthly Budget Limit</label>
+            <div class="amount-input">
+              <span class="currency-symbol">&#8377;</span>
+              <input type="number" id="budgetAmount" step="0.01" min="0.01" placeholder="0.00" required />
+            </div>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn-cancel" id="cancelBudget">Cancel</button>
+            <button type="submit" class="btn-add">Save Budget</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Toast notification -->
+    <div class="toast" id="toast"></div>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
